@@ -1,6 +1,7 @@
 package app
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -21,5 +22,8 @@ func Start() {
 
 	//Starting Server
 	err := http.ListenAndServe("localhost:8080", router)
-	LogIfErr(err)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 }

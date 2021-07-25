@@ -19,11 +19,6 @@ type Customer struct {
 }
 
 func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
-	// customers := []Customer{
-	// 	{"John", "New York", "110075"},
-	// 	{"Paul", "New York", "110075"},
-	// }
-
 	customers, _ := ch.service.GetAllCustomer()
 
 	contentType := r.Header.Get("Content-Type")
