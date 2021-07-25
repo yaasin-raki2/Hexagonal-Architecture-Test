@@ -39,8 +39,10 @@ func (d CustomerRepositoryDB) FindAll() ([]Customer, error) {
 }
 
 func NewCustomerRepositoryDB() CustomerRepositoryDB {
-	connStr := "postgres://postgres:postgres@localhost:5432/banking?sslmode=disable"
+	connStr := "postgres://postgres:postgres@localhost:4000/postgres?sslmode=disable"
+
 	client, err := sql.Open("postgres", connStr)
+
 	if err != nil {
 		log.Fatal(err)
 	}

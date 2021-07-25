@@ -1,4 +1,3 @@
-CREATE DATABASE Banking;
 -------------------------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS customers CASCADE;
