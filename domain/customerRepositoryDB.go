@@ -13,7 +13,7 @@ type CustomerRepositoryDB struct {
 }
 
 func (d CustomerRepositoryDB) FindAll() ([]Customer, error) {
-	findAllSql := "SELECT * FROM customer"
+	findAllSql := "SELECT * FROM customers"
 
 	rows, err := d.client.Query(findAllSql)
 
@@ -36,11 +36,10 @@ func (d CustomerRepositoryDB) FindAll() ([]Customer, error) {
 	}
 
 	return customers, nil
-
 }
 
 func NewCustomerRepositoryDB() CustomerRepositoryDB {
-	connStr := "postgres://postgres:postgres@localhost:5432/banking?sslmode=verify-full"
+	connStr := "postgres://postgres:postgres@localhost:5432/banking?sslmode=disable"
 	client, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
