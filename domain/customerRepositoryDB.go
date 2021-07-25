@@ -26,7 +26,7 @@ func (d CustomerRepositoryDB) FindAll() ([]Customer, error) {
 	for rows.Next() {
 		var c Customer
 
-		err := rows.Scan(&c.Id, &c.Name, &c.City, &c.ZipCode, &c.DateofBirth, &c.Status)
+		err := rows.Scan(&c.Id, &c.Name, &c.DateofBirth, &c.City, &c.ZipCode, &c.Status)
 
 		if err != nil {
 			log.Fatal(err)
@@ -36,6 +36,23 @@ func (d CustomerRepositoryDB) FindAll() ([]Customer, error) {
 	}
 
 	return customers, nil
+}
+
+func (d CustomerRepositoryDB) ById(id string) (*Customer, error) {
+	customerSql := "SELECT * FROM customers WHERE customer_id = $1"
+
+	row := d.client.QueryRow(customerSql, id)
+
+	var c Customer
+
+	err := row.Scan(&c.Id, &c.Name, &c.DateofBirth, &c.City, &c.ZipCode, &c.Status)
+
+	if err != nil {
+		log.Println("Error while scanning the cutomer " + err.Error())
+		return nil, err
+	}
+
+	return &c, nil
 }
 
 func NewCustomerRepositoryDB() CustomerRepositoryDB {
