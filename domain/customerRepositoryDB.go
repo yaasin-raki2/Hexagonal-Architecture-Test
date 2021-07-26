@@ -6,6 +6,7 @@ import (
 	"time"
 
 	_ "github.com/lib/pq"
+	"github.com/yaasin-raki2/banking/errs"
 )
 
 type CustomerRepositoryDB struct {
@@ -38,7 +39,7 @@ func (d CustomerRepositoryDB) FindAll() ([]Customer, error) {
 	return customers, nil
 }
 
-func (d CustomerRepositoryDB) ById(id string) (*Customer, error) {
+func (d CustomerRepositoryDB) ById(id string) (*Customer, *errs.AppError) {
 	customerSql := "SELECT * FROM customers WHERE customer_id = $1"
 
 	row := d.client.QueryRow(customerSql, id)
@@ -48,8 +49,12 @@ func (d CustomerRepositoryDB) ById(id string) (*Customer, error) {
 	err := row.Scan(&c.Id, &c.Name, &c.DateofBirth, &c.City, &c.ZipCode, &c.Status)
 
 	if err != nil {
-		log.Println("Error while scanning the cutomer " + err.Error())
-		return nil, err
+		if err == sql.ErrNoRows {
+			return nil, errs.NewNotFoundError("customer not found")
+		} else {
+			log.Println("Error while scanning the cutomer " + err.Error())
+			return nil, errs.NewUnexpectedError("unexpected database error")
+		}
 	}
 
 	return &c, nil
