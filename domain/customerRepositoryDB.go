@@ -2,7 +2,9 @@ package domain
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/jmoiron/sqlx"
@@ -53,7 +55,15 @@ func (d CustomerRepositoryDB) ById(id string) (*Customer, *errs.AppError) {
 }
 
 func NewCustomerRepositoryDB() CustomerRepositoryDB {
-	connStr := "postgres://postgres:postgres@localhost:4000/postgres?sslmode=disable"
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbAddress := os.Getenv("DB_ADDRESS")
+	dbPort := os.Getenv("DB_PORT")
+	dbName := os.Getenv("DB_NAME")
+
+	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable",
+		dbUser, dbPassword, dbAddress, dbPort, dbName,
+	)
 
 	client, err := sqlx.Open("postgres", connStr)
 
