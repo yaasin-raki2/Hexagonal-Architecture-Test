@@ -7,6 +7,7 @@ import (
 
 	_ "github.com/lib/pq"
 	"github.com/yaasin-raki2/banking/errs"
+	"github.com/yaasin-raki2/banking/logger"
 )
 
 type CustomerRepositoryDB struct {
@@ -24,7 +25,7 @@ func (d CustomerRepositoryDB) FindAll(status string) ([]Customer, *errs.AppError
 	}
 
 	if err != nil {
-		log.Println("Error while querying cutomers table " + err.Error())
+		logger.Error("Error while querying cutomers table " + err.Error())
 		return nil, errs.NewUnexpectedError("unexpected database error")
 	}
 
@@ -36,7 +37,7 @@ func (d CustomerRepositoryDB) FindAll(status string) ([]Customer, *errs.AppError
 		err := rows.Scan(&c.Id, &c.Name, &c.DateofBirth, &c.City, &c.ZipCode, &c.Status)
 
 		if err != nil {
-			log.Println("Error while scanning the cutomers " + err.Error())
+			logger.Error("Error while scanning the cutomers " + err.Error())
 			return nil, errs.NewUnexpectedError("unexpected database error")
 		}
 
@@ -59,7 +60,7 @@ func (d CustomerRepositoryDB) ById(id string) (*Customer, *errs.AppError) {
 		if err == sql.ErrNoRows {
 			return nil, errs.NewNotFoundError("customer not found")
 		} else {
-			log.Println("Error while scanning the cutomer " + err.Error())
+			logger.Error("Error while scanning the cutomer " + err.Error())
 			return nil, errs.NewUnexpectedError("unexpected database error")
 		}
 	}
