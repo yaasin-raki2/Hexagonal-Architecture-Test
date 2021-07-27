@@ -38,7 +38,7 @@ func (d CustomerRepositoryDB) ById(id string) (*Customer, *errs.AppError) {
 
 	var c Customer
 
-	err := d.client.Get(customerSql, id)
+	err := d.client.Get(&c, customerSql, id)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
